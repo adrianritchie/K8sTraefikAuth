@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: forwardauth-deployment
+spec:
+  selector:
+    matchLabels:
+      app: forwardauth
+  replicas: 1 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: forwardauth
+        counter: "1"
+    spec:
+      containers:
+      - name: forwardauth
+        image: mesosphere/traefik-forward-auth
+        envFrom:
+          - configMapRef:
+              name: forwardauth-config
+          - secretRef:
+              name: forwardauth-secrets
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/nsswitch.conf
+          subPath: nsswitch.conf
+        ports:
+        - containerPort: 4181
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+      hostAliases:
+      - ip: 10.99.190.136
+        hostnames:
+        - id.kodo.dev
+      volumes:
+      - name: config-volume
+        configMap:
+          name: forwardauth-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: forwardauth-service
+spec:
+  selector:
+    app: forwardauth
+  ports:
+  - port: 4181
+    targetPort: 4181
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: forwardauth-ingressroute
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: PathPrefix(`/_oauth`)
+    kind: Rule
+    services:
+    - name: forwardauth-service
+      port: 4181
+    middlewares:
+      - name: forwardauth-forwardauth
+  tls:
+    certResolver: kododev
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: forwardauth-middleware
+spec:
+  forwardAuth:
+    address: http://forwardauth-service.default:4181
+    authResponseHeaders: 
+    - X-Forwarded-User
+    trustForwardHeader: true
