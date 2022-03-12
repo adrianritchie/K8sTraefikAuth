@@ -1,1 +1,3 @@
 answers.traefik.secrets.yaml
+forwardauth-secrets.yaml
+.gitignore
