@@ -1,0 +1,15 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-dashboard-ingressroute
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`traefik.kodo.dev`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
+    kind: Rule
+    services:
+    - kind: TraefikService
+      name: api@internal
+  tls:
+    certResolver: kododev

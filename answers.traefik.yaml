@@ -10,7 +10,8 @@ deployment:
 # All available options available on https://docs.traefik.io/reference/static-configuration/cli/
 ## Use curly braces to pass values: `helm install --set="additionalArguments={--providers.kubernetesingress.ingressclass=traefik-internal,--log.level=DEBUG}"`
 additionalArguments:
-#- "--log.level=DEBUG"
+- "--log.level=DEBUG"
+- "--certificatesresolvers.kododev.acme.certificatesDuration=23"
 - "--certificatesresolvers.kododev.acme.dnschallenge=true"
 - "--certificatesresolvers.kododev.acme.dnschallenge.provider=cloudflare"
 #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
@@ -73,11 +74,12 @@ ports:
       # this is the name of a TLSOption definition
       options: ""
       certResolver: "kododev"
-      domains: []
-      # - main: example.com
-      #   sans:
-      #     - foo.example.com
-      #     - bar.example.com
+      domains:
+      - main: kodo.dev
+        sans:
+          - nginx.kodo.dev
+          - traefik.kodo.dev
+          - id.kodo.dev
 
 
 # TLS Options are created as TLSOption CRDs
