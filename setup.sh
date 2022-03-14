@@ -14,4 +14,4 @@ kubectl apply -n keycloak keycloak-ingress.yaml
 kubectl apply -n keycloak -f keycloak-ingress.yaml 
 kubectl apply -n default nginx-sample.yaml 
 kubectl apply -n default -f nginx-sample.yaml 
-kubectl apply -n default -f forwardauth.yaml -f forwardauth-secrets.yaml -f forwardauth-config.yaml
+kubectl apply -n default -f forwardauth.yaml -f forwardauth-secrets.yaml

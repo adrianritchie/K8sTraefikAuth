@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: forwardauth-config
-data:
-  PROVIDER_URI: https://id.kodo.dev:8443/auth/realms/Dev
-  CLIENT_ID: traefik
-  LOG_LEVEL: debug
-  nsswitch.conf: "hosts: files dns"

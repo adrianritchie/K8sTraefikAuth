@@ -11,7 +11,7 @@ spec:
     metadata:
       labels:
         app: forwardauth
-        counter: "1"
+        counter: "4"
     spec:
       containers:
       - name: forwardauth
@@ -65,7 +65,7 @@ spec:
     - name: forwardauth-service
       port: 4181
     middlewares:
-      - name: forwardauth-forwardauth
+      - name: forwardauth-middleware
   tls:
     certResolver: kododev
 ---
@@ -79,3 +79,15 @@ spec:
     authResponseHeaders: 
     - X-Forwarded-User
     trustForwardHeader: true
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: forwardauth-config
+data:
+  PROVIDER_URI: https://id.kodo.dev:8443/auth/realms/Dev
+  CLIENT_ID: traefik
+  LOG_LEVEL: debug
+  SCOPE: openid email
+  LIFETIME: "30"
+  nsswitch.conf: "hosts: files dns"
