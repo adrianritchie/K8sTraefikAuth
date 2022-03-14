@@ -5,6 +5,8 @@ The is an example setup of using Traefik & Keycloak with the FowardAuth middlewa
 Thi s is a very rough POC.  It can be installed using `setup.sh`.
 
 ## Traefik
+See: https://doc.traefik.io/traefik/v2.6/
+
 Installed as Helm chart using the `answers.traefik.yaml` file.  A second file, `answers.traefik.secrets.yaml` file is required with the following content:
 ```yaml
 # Environment variables to be passed to Traefik's binary
@@ -19,6 +21,8 @@ These settings are using for the LetEncypt dns authentication for generating ssl
 Then an IngressRoute is created using the `traefik-dashboard.yaml` file in order to access the Traefik Dashboard for viewing the Traefik resources that are being created below.
 
 ##  Keycloak
+See: https://www.keycloak.org/
+
 Installed as Helm chart using the `answers.keycloak.yaml` file. 
 
 The an IngressRoute to Keycloak is created using the `keycloak-ingress.yaml` file, in order to access the Keycloak UI in a browser.
@@ -26,6 +30,8 @@ The an IngressRoute to Keycloak is created using the `keycloak-ingress.yaml` fil
  A realm needs to be created and the `traefik.json` file imported to create the client used by this app.
 
 ## ForwardAuth pod & middleware
+See: https://github.com/mesosphere/traefik-forward-auth
+
 Installed using `forwardauth.yaml` and a second file `forwarauth-secrets.yaml` that needs to be created with the following content:
 ```yaml
 apiVersion: v1
